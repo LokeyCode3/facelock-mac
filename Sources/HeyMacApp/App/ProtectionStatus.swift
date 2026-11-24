@@ -57,7 +57,9 @@ extension AppModel {
         case .resume: setPaused(false)
         case .camera: requestCamera()
         case .face: showSettings(.face)
-        case .lockScreen: showSettings(.lockScreen)
+        case .lockScreen:
+            if !accessibilityTrusted { requestAccessibility() }
+            showSettings(.lockScreen)
         case .apps: showSettings(.appLock)
         case .addApp: showSettings(.appLock); AppPickerState.shared.open()
         }
