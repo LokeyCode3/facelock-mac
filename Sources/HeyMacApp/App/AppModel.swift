@@ -159,6 +159,10 @@ final class AppModel {
         accessibilityTrusted = AXIsProcessTrusted()
         cameraAuthorized = AVCaptureDevice.authorizationStatus(for: .video) == .authorized
         lockScreenNeedsPassword = settings.lockScreenNeedsPassword
+        if accessibilityTrusted && lastEvent == "Accessibility permission missing" {
+            lastEvent = L10n.text("Face recognition is ready")
+            activityStore.recordEvent(lastEvent)
+        }
     }
 
     // MARK: - Engine
