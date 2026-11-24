@@ -1,18 +1,18 @@
 <div align="center">
 
-<img src="assets/logo.svg" width="90" alt="Animated Hey Mac Logo" style="margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); border-radius: 22px;"/>
+<img src="assets/logo.svg" width="90" alt="FaceLock Mac Logo" style="margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); border-radius: 22px;"/>
 
-# Hey Mac
+# FaceLock Mac (Hey Mac)
 
 **Your face is the password.**<br>
-Unlock your Mac's lock screen and secure individual apps with a single look.
+Unlock your Mac's lock screen, shield sensitive apps, and autofill website logins with a single look.
 
 <br>
 
 ![macOS](https://img.shields.io/badge/macOS-14.0%2B-black?style=for-the-badge&logo=apple&logoColor=white)
 ![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-Native-0071E3?style=for-the-badge&logo=apple&logoColor=white)
 ![Privacy](https://img.shields.io/badge/100%25-On--Device-34C759?style=for-the-badge&logo=shield&logoColor=white)
-![Views](https://komarev.com/ghpvc/?username=iharshitmaurya&repo=HeyMac&label=Views&color=0071E3&style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
 </div>
 
@@ -20,44 +20,68 @@ Unlock your Mac's lock screen and secure individual apps with a single look.
 
 ---
 
-## ✨ Features
+## ⚡ 1-Click Terminal Install & Run
 
-Hey Mac bridges the gap between iOS-level convenience and macOS security, bringing native-feeling facial recognition to your desktop.
+Copy and paste this single command into your macOS **Terminal** to clone, build, install into `/Applications`, and launch FaceLock immediately:
 
-*   🔓 **Zero-Touch Unlock:** Wake your Mac, look at the screen, and you're immediately logged in. No keyboard required.
-*   🛡️ **Application-Level Shielding:** Protect sensitive apps (Messages, Notes, Mail). Unauthorized viewers see a blurred interface until your identity is verified via Face, Touch ID, or password.
-*   🌫️ **Adaptive Privacy Blurs:** Choose your obfuscation level. Blur the entire display for maximum privacy, or strictly blur the locked application window to maintain workflow context.
-*   ⏱️ **Intelligent Relock Policies:** Granular control per application. Require authentication immediately upon launch, after a set duration (5-15 mins), or gracefully lock after you switch focus away from the app.
-*   🏝️ **Dynamic Notch Island:** A fluid, native-feeling UI drops down from the macOS notch, providing instant visual feedback during biometric scans.
-*   🧑‍🚀 **Frictionless Onboarding:** Choose Lock Screen, App Lock, or both, then follow the setup steps needed for those features.
+```bash
+git clone https://github.com/LokeyCode3/facelock-mac.git && cd facelock-mac && ./scripts/build-app.sh && cp -R dist/HeyMac.app /Applications/ && open /Applications/HeyMac.app
+```
+
+> 💡 **Tip:** Once launched, click the **Hey Mac** icon in your macOS menu bar (top-right) and open **Settings** (`⌘,`) to set up your face profile.
 
 ---
 
-## 📦 Install
+## ✨ Features
 
-### Download
+FaceLock Mac bridges the gap between iPhone Face ID convenience and macOS desktop security.
 
-> ⚠️  **IMPORTANT:** If macOS blocks Hey Mac, go to **System Settings → Privacy & Security → Open Anyway**.
+* 🔑 **Face ID AutoFill & Password Vault:** Unlock and autofill website & app logins (e.g. Amazon, Google, GitHub) using face recognition. Features an encrypted local vault and a Spotlight-style quick picker palette (`⌥⌘F`).
+* 🍏 **Apple Passwords Integration:** Directly import your exported passwords from the macOS Passwords app (`File → Export All Passwords… → Passwords.csv`) with 1 click.
+* 🔓 **Zero-Touch Lock Screen Unlock:** Wake your Mac display, look at the camera, and you are instantly logged in without typing your password.
+* 🛡️ **App-Level Shielding:** Protect sensitive apps (Messages, Notes, Mail, Slack). Unauthorized viewers see an obfuscated blur until verified by Face, Touch ID, or password.
+* 🌫️ **Adaptive Privacy Blurring:** Choose your privacy obfuscation level—blur the entire display or strictly blur the locked application window.
+* ⏱️ **Intelligent Relock Policies:** Configure relock rules per app (e.g. lock immediately on focus loss, or after 5–15 minutes of inactivity).
+* 🏝️ **Dynamic Notch Island:** Fluid animated UI that drops down smoothly from the macOS notch to provide instant visual biometric feedback.
+* 🔒 **Quit Protection:** Prevents unauthorized force-quitting or closing when protected applications are open.
 
-Download the latest `.dmg` and drag **Hey Mac** into your Applications folder.
-
-<a href="https://github.com/iharshitmaurya/HeyMac/releases/latest/download/HeyMac.dmg">
-  <img src="https://img.shields.io/badge/↓%20Download%20HeyMac-0071E3?style=for-the-badge&logo=apple&logoColor=white" alt="Download Hey Mac"/>
-</a>
-
-### Homebrew
-
-```bash
-brew install --cask iharshitmaurya/tap/heymac
-```
 ---
 
 ## 🔒 Private & Secure by Design
 
-Security is not an afterthought; it is the foundation of Hey Mac. This application operates on a strict zero-trust, local-only model.
+Security and privacy are the core pillars of FaceLock Mac. The entire architecture operates on a local-only, zero-trust model:
 
-> **100% On-Device Processing:** All facial recognition is handled locally by the Apple Neural Engine via Core ML. **No data ever leaves your machine.**
+* **100% On-Device Processing:** All facial recognition, feature extraction, and liveness classification run strictly on your Mac's Apple Neural Engine (ANE) via Apple Core ML. **No photos or biometric data ever leave your machine.**
+* **Zero Photo Storage:** No photos of your face are ever saved to disk. FaceLock only stores a mathematical vector embedding of your facial structure, encrypted on disk with AES-GCM and protected by the **macOS Keychain**.
+* **Anti-Spoofing & Liveness Detection:** Built-in neural network checks verify liveness in real-time to reject static photos and screens held in front of the webcam.
 
-*   **Zero Photo Storage:** Hey Mac does not save images of your face. It generates a mathematical, numeric embedding of your facial structure, stored encrypted on this Mac, with its encryption key protected by **macOS Keychain**.
-*   **Anti-Spoofing:** A built-in liveness check helps reject photos and screens held up to the camera. Hey Mac uses your Mac's regular camera, not a depth sensor like Face ID on iPhone, so keep a strong password.
-*   **Quit Protection:** If Hey Mac is securing an app, quitting the app requires biometric authentication. A background launch agent can restart Hey Mac after unexpected termination.
+---
+
+## 🛠️ Building & Development
+
+### Prerequisites
+* macOS Sonoma (14.0) or later
+* Apple Silicon Mac (M1/M2/M3/M4)
+* Swift 6.0+ / Xcode Command Line Tools
+
+### Build via Terminal
+```bash
+# Clone the repository
+git clone https://github.com/LokeyCode3/facelock-mac.git
+cd facelock-mac
+
+# Run test suite
+swift test -Xswiftc -load-plugin-library -Xswiftc /Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing/libTestingMacros.dylib#TestingMacros
+
+# Build release .app and DMG
+./scripts/build-app.sh
+
+# Launch the app
+open dist/HeyMac.app
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
