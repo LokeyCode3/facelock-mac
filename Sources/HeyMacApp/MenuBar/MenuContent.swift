@@ -46,6 +46,7 @@ struct MenuContent: View {
             }
             if model.setupComplete {
                 actionRow(paused ? "Resume face recognition" : "Pause face recognition", icon: paused ? "play.circle" : "pause.circle", shortcut: nil) { model.setPaused(!paused) }
+                actionRow("AutoFill with Face…", icon: "key.fill", shortcut: nil) { model.triggerAutoFill() }
             }
             actionRow("Settings…", icon: "gearshape", shortcut: "⌘,") { model.openSettings() }
             if AppUpdater.shared.isAvailable {

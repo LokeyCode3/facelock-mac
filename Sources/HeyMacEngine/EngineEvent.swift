@@ -28,4 +28,5 @@ public enum EngineEvent: Equatable, Sendable {
 public enum StoredItems {
     public static let loginPassword = "login-password"
     public static let faceCentroid = "face-centroid"
+    public static let credentialVault = "credential-vault"
 }

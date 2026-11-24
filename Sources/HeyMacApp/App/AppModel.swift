@@ -74,6 +74,10 @@ final class AppModel {
             guard let self, self.setupComplete, !self.paused, !self.busy, let runtime = self.runtime else { return nil }
             return runtime.verifier(interactive: false, strictness: self.strictness)
         }
+        AutoFillController.shared.faceMatcher = { [weak self] in
+            guard let self, self.setupComplete, !self.paused, !self.busy, let runtime = self.runtime else { return nil }
+            return runtime.verifier(interactive: false, strictness: self.strictness)
+        }
         DispatchQueue.main.async { AppLockController.shared.start() }
         if AppLockController.shared.store.enabled { AppLockAgent.register() }
 
@@ -357,6 +361,20 @@ final class AppModel {
         if !accessibilityTrusted { openSystemSettings(anchor: "Privacy_Accessibility") }
     }
 
+    func requestCamera() {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        if status == .notDetermined {
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] _ in
+                Task { @MainActor in
+                    self?.refreshSystemState()
+                    self?.restartEngine()
+                }
+            }
+        } else {
+            openSystemSettings(anchor: "Privacy_Camera")
+        }
+    }
+
     func openSystemSettings(anchor: String) {
         guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?\(anchor)") else { return }
         NSWorkspace.shared.open(url)
@@ -492,5 +510,9 @@ final class AppModel {
                      resizable: true, minSize: CGSize(width: 640, height: 480), autosaveName: "HeyMacSettings") {
             SettingsView(model: self)
         }
+    }
+
+    func triggerAutoFill() {
+        AutoFillController.shared.triggerAutoFill()
     }
 }

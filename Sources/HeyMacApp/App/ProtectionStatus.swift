@@ -55,7 +55,7 @@ extension AppModel {
         case .none: break
         case .setup: openSetup()
         case .resume: setPaused(false)
-        case .camera: openSystemSettings(anchor: "Privacy_Camera")
+        case .camera: requestCamera()
         case .face: showSettings(.face)
         case .lockScreen: showSettings(.lockScreen)
         case .apps: showSettings(.appLock)

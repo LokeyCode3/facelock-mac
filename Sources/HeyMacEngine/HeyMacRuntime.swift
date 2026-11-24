@@ -19,6 +19,7 @@ public final class HeyMacRuntime: @unchecked Sendable {
     public let sessionLock = NSLock()
     public let interactiveStore: SecureStore
     public let backgroundStore: SecureStore
+    public let credentialVault: CredentialVault
 
     private let interactiveKeys: KeychainKeyProvider
     private let interactiveCache: CachingKeyProvider
@@ -38,6 +39,7 @@ public final class HeyMacRuntime: @unchecked Sendable {
         backgroundCache = CachingKeyProvider(wrapping: KeychainKeyProvider(account: NSUserName(), interactive: false))
         interactiveStore = SecureStore(keyProvider: interactiveCache, directory: supportDirectory)
         backgroundStore = SecureStore(keyProvider: backgroundCache, directory: supportDirectory)
+        credentialVault = CredentialVault(store: interactiveStore)
 
         embedder = try FaceEmbedder()
         classifier = try AntiSpoofClassifier()
@@ -82,6 +84,7 @@ public final class HeyMacRuntime: @unchecked Sendable {
     public func removeAllData() throws {
         try removeFile(StoredItems.faceCentroid)
         try removeFile(StoredItems.loginPassword)
+        try removeFile(StoredItems.credentialVault)
         try interactiveKeys.deleteKey()
         interactiveCache.clearCache()
         backgroundCache.clearCache()

@@ -7,6 +7,7 @@ enum SettingsPane: String, CaseIterable, Identifiable {
     case status = "Overview"
     case lockScreen = "Lock Screen"
     case appLock = "App Lock"
+    case autoFill = "AutoFill"
     case face = "Your Face"
     case appearance = "Appearance"
     case about = "About Hey Mac"
@@ -18,6 +19,7 @@ enum SettingsPane: String, CaseIterable, Identifiable {
         case .status: return "shield"
         case .lockScreen: return "lock.fill"
         case .appLock: return "square.grid.2x2"
+        case .autoFill: return "key.fill"
         case .face: return "faceid"
         case .appearance: return "sun.max"
         case .about: return "info.circle"
@@ -105,6 +107,7 @@ struct SettingsView: View {
                 case .status: StatusPane(model: model)
                 case .lockScreen: LockScreenPane(model: model)
                 case .appLock: AppLockPane(model: model)
+                case .autoFill: AutoFillPane(model: model)
                 case .face: FacePane(model: model)
                 case .appearance: AppearancePane(model: model)
                 case .about: AboutPane(model: model)
@@ -352,7 +355,7 @@ private struct LockScreenPane: View {
                     if model.cameraAuthorized {
                         StatusChip(text: "Allowed", tone: .good)
                     } else {
-                        Button("Review Camera Access…") { model.openSystemSettings(anchor: "Privacy_Camera") }
+                        Button("Review Camera Access…") { model.requestCamera() }
                             .buttonStyle(PillButtonStyle(kind: .secondary))
                     }
                 }
@@ -509,7 +512,7 @@ private struct FacePane: View {
                     if model.cameraAuthorized {
                         StatusChip(text: "Allowed", tone: .good)
                     } else {
-                        Button("Review Camera Access…") { model.openSystemSettings(anchor: "Privacy_Camera") }
+                        Button("Review Camera Access…") { model.requestCamera() }
                             .buttonStyle(PillButtonStyle(kind: .secondary))
                     }
                 }
